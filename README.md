@@ -7,7 +7,7 @@ Compute synthetic photometry (magnitudes and fluxes) from spectra for different 
 * flux_unit: flux and error units
 	* 'erg/s/cm2/A'
 	* 'Jy'
-* filters: filters to derive synthetic photometry following SVO filter names 
+* filters: filters to derive synthetic photometry following [SVO filter names](http://svo2.cab.inta-csic.es/theory/fps/)
 
 ## Returns
 ------
