@@ -1,4 +1,4 @@
-# filter            wl_ref(A) wl_mean(A) wl_eff(A) wl_min(A) wl_max(A)  width_eff(A) zero(Jy)  zero(erg/cm2/s/A) Facility  Instrument
+# filter            wl_ref(A) wl_mean(A) wl_eff(A) wl_min(A) wl_max(A)  width_eff(A) zero(Jy)  zero(erg/cm2/s/A) Facility  Instrument 
   SLOAN/SDSS.u      3556.52   3572.18    3608.04   3055.11   4030.64    540.97       1582.54   3.75e-9           SLOAN     ""
   SLOAN/SDSS.g      4702.50   4750.82    4671.78   3797.64   5553.04    1064.68      4023.57   5.45e-9           SLOAN     ""
   SLOAN/SDSS.r      6175.58   6204.29    6141.12   5418.23   6994.42    1055.51      3177.38   2.5e-9            SLOAN     ""
