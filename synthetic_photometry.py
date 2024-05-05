@@ -1,6 +1,7 @@
-from sys import exit
 from astropy.io import ascii
 import numpy as np
+import os
+from sys import exit
 
 def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None): 
 	'''
@@ -43,6 +44,8 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 
 	'''
 
+	path_synthetic_photometry = os.path.dirname(__file__)
+
 	mask_nonan = ~np.isnan(flux)
 	wl = wl[mask_nonan]
 	flux = flux[mask_nonan]
@@ -53,7 +56,7 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 
 	# read filters response curves and zero points
 	filter_parms_file = 'filters_properties'
-	filter_parms = ascii.read(filter_parms_file)
+	filter_parms = ascii.read(path_synthetic_photometry+'/'+filter_parms_file)
 	name_filt = filter_parms['filter']
 	f0_filt = filter_parms['zero(Jy)'] # in Jy
 
@@ -69,7 +72,7 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	for k in range(len(filters)): # iterate for each filter
 		# read filter response
 		path_filters = 'filter_transmissions/'
-		filter_response = ascii.read(path_filters+filters[k].replace('/', '_')+'.dat')
+		filter_response = ascii.read(path_synthetic_photometry+'/'+path_filters+filters[k].replace('/', '_')+'.dat')
 	
 		try: filter_response
 		except NameError: print(f'ERROR: NO FILTER RESPONSE FILE FOR FILTER {filters[k]}'), exit()
@@ -147,4 +150,4 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 		if (eflux is not None): out_synthetic_photometry['esyn_flux(erg/s/cm2/A)'] = esyn_flux_erg
 		if (eflux is not None): out_synthetic_photometry['esyn_mag'] = esyn_mag
 
-	return out
+	return out_synthetic_photometry 

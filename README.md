@@ -1,5 +1,5 @@
-# synthetic_photometry
-Compute synthetic magnitudes and fluxes from spectra using several filters
+# Synthetic Photometry
+Compute synthetic photometry (magnitudes and fluxes) from spectra for different filters
 
 wl: wavelength in um
 flux and eflux (optional) in units specified by flux_unit
