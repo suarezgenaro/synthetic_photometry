@@ -1,10 +1,11 @@
-# compute synthetic magnitude and fluxes from spectra using several filters
 from sys import exit
 from astropy.io import ascii
 import numpy as np
 
-def synthetic_phot(wl, flux, filters, flux_unit, eflux=None): 
+def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None): 
 	'''
+	Compute synthetic magnitudes and fluxes from spectra using several filters
+
 	wl: wavelength in um
 	flux and eflux (optional) in units specified by flux_unit
 	flux_unit: flux and error units
@@ -12,21 +13,33 @@ def synthetic_phot(wl, flux, filters, flux_unit, eflux=None):
 				'Jy'
 	filters: filters to derive synthetic photometry following SVO filter names 
 
+	Returns
+	------
+	out_synthetic_photometry: python dictionary with the following parameters for each filter
+		out_synthetic_photometry['lambda_eff(um)']: effective wavelength in micron
+		out_synthetic_photometry['width_eff(um)']: effective width in micron
+		out_synthetic_photometry['syn_flux(erg/s/cm2/A)']: synthetic flux in erg/s/cm2/A
+		out_synthetic_photometry['esyn_flux(erg/s/cm2/A)']: synthetic flux errors in erg/s/cm2/A (if input flux errors are provided)
+		out_synthetic_photometry['syn_flux(Jy)']: synthetic flux in Jy
+		out_synthetic_photometry['esyn_flux(Jy)']: synthetic flux errors in Jy (if input flux errors are provided)
+		out_synthetic_photometry['syn_mag']: synthetic magnitude
+		out_synthetic_photometry['esyn_mag']: synthetic magnitude error (if input flux errors are provided)
+
 	Example
-	>>> import synthetic_phot as synthetic_phot
+	>>> import synthetic_photometry as synthetic_photometry 
 	>>> # assume we have a spectrum wavelength (wl in um), flux (in erg/s/cm2/A), and flux error (eflux) and we want synthetic photometry for several filters
 	>>> filters = (['Spitzer/IRAC.I1', 'WISE/WISE.W1']) # filters of interest
 	>>>	# run the code
-	>>> out_synthetic_phot = synthetic_phot.synthetic_phot(wl=wl, flux=flux, eflux=eflux, flux_unit='erg/s/cm2/A', filters=filters)
+	>>> out_synthetic_photometry = synthetic_photometry.synthetic_photometry(wl=wl, flux=flux, eflux=eflux, flux_unit='erg/s/cm2/A', filters=filters)
 	>>> # output
-	>>> eff_wl = out_synthetic_phot['lambda_eff(um)'] # effective wavelength (um) for each filter
-	>>> eff_width = out_synthetic_phot['width_eff(um)'] # effective width (um) for each filter
-	>>> flux_syn = out_synthetic_phot['syn_flux(erg/s/cm2/A)'] # synthetic flux (erg/s/cm2/A) for each filter
-	>>> eflux_syn = out_synthetic_phot['esyn_flux(erg/s/cm2/A)'] # synthetic flux errors (erg/s/cm2/A) for each filter
-	>>> flux_Jy_syn = out_synthetic_phot['syn_flux(Jy)'] # synthetic flux (Jy) for each filter
-	>>> eflux_Jy_syn = out_synthetic_phot['esyn_flux(Jy)'] # synthetic flux errors (Jy) for each filter
-	>>> mag_syn = out_synthetic_phot['syn_mag'] # synthetic magnitude for each filter
-	>>> emag_syn = out_synthetic_phot['esyn_mag'] # synthetic magnitude error for each filter
+	>>> eff_wl = out_synthetic_photometry['lambda_eff(um)'] # effective wavelength (um) for each filter
+	>>> eff_width = out_synthetic_photometry['width_eff(um)'] # effective width (um) for each filter
+	>>> flux_syn = out_synthetic_photometry['syn_flux(erg/s/cm2/A)'] # synthetic flux (erg/s/cm2/A) for each filter
+	>>> eflux_syn = out_synthetic_photometry['esyn_flux(erg/s/cm2/A)'] # synthetic flux errors (erg/s/cm2/A) for each filter
+	>>> flux_Jy_syn = out_synthetic_photometry['syn_flux(Jy)'] # synthetic flux (Jy) for each filter
+	>>> eflux_Jy_syn = out_synthetic_photometry['esyn_flux(Jy)'] # synthetic flux errors (Jy) for each filter
+	>>> mag_syn = out_synthetic_photometry['syn_mag'] # synthetic magnitude for each filter
+	>>> emag_syn = out_synthetic_photometry['esyn_mag'] # synthetic magnitude error for each filter
 
 	'''
 
@@ -39,7 +52,7 @@ def synthetic_phot(wl, flux, filters, flux_unit, eflux=None):
 	if (type(filters) is str): filters = ([filters])
 
 	# read filters response curves and zero points
-	filter_parms_file = '/home/gsuarez/TRABAJO/PDFs/Papers/data/Filter_Transmissions/filters_properties_SVO'
+	filter_parms_file = 'filters_properties'
 	filter_parms = ascii.read(filter_parms_file)
 	name_filt = filter_parms['filter']
 	f0_filt = filter_parms['zero(Jy)'] # in Jy
@@ -55,7 +68,7 @@ def synthetic_phot(wl, flux, filters, flux_unit, eflux=None):
 	width_eff = np.zeros(len(filters))
 	for k in range(len(filters)): # iterate for each filter
 		# read filter response
-		path_filters = '/home/gsuarez/TRABAJO/PDFs/Papers/data/Filter_Transmissions/'
+		path_filters = 'filter_transmissions/'
 		filter_response = ascii.read(path_filters+filters[k].replace('/', '_')+'.dat')
 	
 		try: filter_response
@@ -129,9 +142,9 @@ def synthetic_phot(wl, flux, filters, flux_unit, eflux=None):
 			#twoMASS_erg[i] = twoMASS_Jy / (3.33564095e+04*(lambda_eff*1e4)**2)
 			#etwoMASS_erg[i] = twoMASS_erg[i] * etwoMASS_Jy/twoMASS_Jy # in erg/s/cm2/A
 
-		out = {'syn_flux(Jy)': syn_flux_Jy, 'syn_flux(erg/s/cm2/A)': syn_flux_erg, 'syn_mag': syn_mag, 'lambda_eff(um)': lambda_eff, 'width_eff(um)': width_eff}
-		if (eflux is not None): out['esyn_flux(Jy)'] = esyn_flux_Jy
-		if (eflux is not None): out['esyn_flux(erg/s/cm2/A)'] = esyn_flux_erg
-		if (eflux is not None): out['esyn_mag'] = esyn_mag
+		out_synthetic_photometry = {'syn_flux(Jy)': syn_flux_Jy, 'syn_flux(erg/s/cm2/A)': syn_flux_erg, 'syn_mag': syn_mag, 'lambda_eff(um)': lambda_eff, 'width_eff(um)': width_eff}
+		if (eflux is not None): out_synthetic_photometry['esyn_flux(Jy)'] = esyn_flux_Jy
+		if (eflux is not None): out_synthetic_photometry['esyn_flux(erg/s/cm2/A)'] = esyn_flux_erg
+		if (eflux is not None): out_synthetic_photometry['esyn_mag'] = esyn_mag
 
 	return out
