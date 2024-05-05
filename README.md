@@ -35,12 +35,12 @@ out_synthetic_photometry = synthetic_photometry.synthetic_photometry(wl=wl, flux
 ```
 output
 ```
-eff_wl = out_synthetic_photometry['lambda_eff(um)'] # effective wavelength (um) for each filter
-eff_width = out_synthetic_photometry['width_eff(um)'] # effective width (um) for each filter
-flux_syn = out_synthetic_photometry['syn_flux(erg/s/cm2/A)'] # synthetic flux (erg/s/cm2/A) for each filter
-eflux_syn = out_synthetic_photometry['esyn_flux(erg/s/cm2/A)'] # synthetic flux errors (erg/s/cm2/A) for each filter
-flux_Jy_syn = out_synthetic_photometry['syn_flux(Jy)'] # synthetic flux (Jy) for each filter
-eflux_Jy_syn = out_synthetic_photometry['esyn_flux(Jy)'] # synthetic flux errors (Jy) for each filter
-mag_syn = out_synthetic_photometry['syn_mag'] # synthetic magnitude for each filter
-emag_syn = out_synthetic_photometry['esyn_mag'] # synthetic magnitude error for each filter
+eff_wl = out_synthetic_photometry['lambda_eff(um)'] # effective wavelength (um) for all filters
+eff_width = out_synthetic_photometry['width_eff(um)'] # effective width (um) for all filters
+flux_syn = out_synthetic_photometry['syn_flux(erg/s/cm2/A)'] # synthetic flux (erg/s/cm2/A) for all filters
+eflux_syn = out_synthetic_photometry['esyn_flux(erg/s/cm2/A)'] # synthetic flux errors (erg/s/cm2/A) for all filters
+flux_Jy_syn = out_synthetic_photometry['syn_flux(Jy)'] # synthetic flux (Jy) for all filters
+eflux_Jy_syn = out_synthetic_photometry['esyn_flux(Jy)'] # synthetic flux errors (Jy) for all filters
+mag_syn = out_synthetic_photometry['syn_mag'] # synthetic magnitude for all filters
+emag_syn = out_synthetic_photometry['esyn_mag'] # synthetic magnitude error for all filters
 ```
