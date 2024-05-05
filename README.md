@@ -5,8 +5,8 @@ Compute synthetic photometry (magnitudes and fluxes) from spectra for different 
 * wl: wavelength in um
 * flux and eflux (optional) in units specified by flux_unit
 * flux_unit: flux and error units
-* 'erg/s/cm2/A'
-			'Jy'
+	* 'erg/s/cm2/A'
+ * 'Jy'
 * filters: filters to derive synthetic photometry following SVO filter names 
 
 ## Returns
