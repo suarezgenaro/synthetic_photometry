@@ -11,15 +11,15 @@ Compute synthetic photometry (magnitudes and fluxes) from spectra for different 
 
 ## Returns
 ------
-out_synthetic_photometry: python dictionary with the following parameters for each filter
-	out_synthetic_photometry['lambda_eff(um)']: effective wavelength in micron
-	out_synthetic_photometry['width_eff(um)']: effective width in micron
-	out_synthetic_photometry['syn_flux(erg/s/cm2/A)']: synthetic flux in erg/s/cm2/A
-	out_synthetic_photometry['esyn_flux(erg/s/cm2/A)']: synthetic flux errors in erg/s/cm2/A (if input flux errors are provided)
-	out_synthetic_photometry['syn_flux(Jy)']: synthetic flux in Jy
-	out_synthetic_photometry['esyn_flux(Jy)']: synthetic flux errors in Jy (if input flux errors are provided)
-	out_synthetic_photometry['syn_mag']: synthetic magnitude
-	out_synthetic_photometry['esyn_mag']: synthetic magnitude error (if input flux errors are provided)
+* out_synthetic_photometry: python dictionary with the following parameters for each filter
+	* out_synthetic_photometry['lambda_eff(um)']: effective wavelength in micron
+	* out_synthetic_photometry['width_eff(um)']: effective width in micron
+	* out_synthetic_photometry['syn_flux(erg/s/cm2/A)']: synthetic flux in erg/s/cm2/A
+	* out_synthetic_photometry['esyn_flux(erg/s/cm2/A)']: synthetic flux errors in erg/s/cm2/A (if input flux errors are provided)
+	* out_synthetic_photometry['syn_flux(Jy)']: synthetic flux in Jy
+	* out_synthetic_photometry['esyn_flux(Jy)']: synthetic flux errors in Jy (if input flux errors are provided)
+	* out_synthetic_photometry['syn_mag']: synthetic magnitude
+	* out_synthetic_photometry['esyn_mag']: synthetic magnitude error (if input flux errors are provided)
 
 ## Example
 import synthetic_photometry as synthetic_photometry 
