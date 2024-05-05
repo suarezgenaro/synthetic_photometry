@@ -33,7 +33,7 @@ run the code
 ```
 out_synthetic_photometry = synthetic_photometry.synthetic_photometry(wl=wl, flux=flux, eflux=eflux, flux_unit='erg/s/cm2/A', filters=filters)
 ```
-# output
+output
 * eff_wl = out_synthetic_photometry['lambda_eff(um)'] # effective wavelength (um) for each filter
 * eff_width = out_synthetic_photometry['width_eff(um)'] # effective width (um) for each filter
 * flux_syn = out_synthetic_photometry['syn_flux(erg/s/cm2/A)'] # synthetic flux (erg/s/cm2/A) for each filter
