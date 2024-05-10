@@ -65,8 +65,7 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	if (type(filters) is str): filters = ([filters])
 
 	# read filters transmission curves and zero points
-	zeropoints_file = 'zeropoints.xml'
-	zeropoints = Table.read(zeropoints_file, format='votable')
+	zeropoints = Table.read('zeropoints.xml', format='votable')
 	filterID = zeropoints['filterID'] # VSO ID
 	ZeroPoint = zeropoints['ZeroPoint'] # Jy
 
@@ -95,6 +94,7 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 			# read filter transmission
 			# check if the filter transmission exits locally already
 			path_filter_transmissions = 'filter_transmissions/'
+			if not os.path.exists(path_filter_transmissions): os.makedirs(path_filter_transmissions) # make directory (if not existing) to store filter transmissions
 			filter_transmission_name = filters[k].replace('/', '_')+'.dat' # when filter name includes '/' replace it by '_'
 			if not os.path.exists(path_synthetic_photometry+path_filter_transmissions+filter_transmission_name): # filter transmission does not exits yet
 				print(f'\nreading and storing filter {filters[k]} directly from the SVO')
