@@ -44,6 +44,14 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	>>> mag_syn = out_synthetic_photometry['syn_mag'] # synthetic magnitude for all filters
 	>>> emag_syn = out_synthetic_photometry['esyn_mag'] # synthetic magnitude error for all filters
 
+	Author: Genaro Suárez
+
+	Modification history
+		2024/05/09	included VOTable table with all SVO filter zero points
+		2024/05/07	filter transmissions are read and downloaded from SVO, if not already stored locally
+		2024/04/20	function created
+		2021      	functional code not as a function
+
 	'''
 
 	path_synthetic_photometry = os.path.dirname(__file__)+'/'
