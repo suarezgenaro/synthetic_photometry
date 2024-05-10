@@ -10,11 +10,12 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 
 	Input parameters:
 	wl: wavelength in um
-	flux and eflux (optional) in units specified by flux_unit
-	flux_unit: flux and error units
+	flux: fluxes in units specified by flux_unit
+	eflux: (optional) flux errors in units specified by flux_unit
+	flux_unit: flux and flux error units
 				'erg/s/cm2/A'
 				'Jy'
-	filters: filters to derive synthetic photometry following SVO filter names 
+	filters: filters (following SVO filter IDs) to derive synthetic photometry
 
 	Returns
 	------
