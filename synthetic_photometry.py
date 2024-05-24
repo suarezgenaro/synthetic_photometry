@@ -9,13 +9,16 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	Compute synthetic magnitudes and fluxes from spectra for different filters
 
 	Input parameters:
-	wl: wavelength in um
-	flux: fluxes in units specified by flux_unit
-	eflux: (optional) flux errors in units specified by flux_unit
-	flux_unit: flux and flux error units
-				'erg/s/cm2/A'
-				'Jy'
-	filters: filters (following SVO filter IDs) to derive synthetic photometry
+	wl: float array
+		wavelength in um
+	flux: float array
+		fluxes in units specified by flux_unit
+	eflux: flux array (optional) 
+		flux errors in units specified by flux_unit to estimate synthetic photometry errors
+	flux_unit: str
+		flux and flux error units 'erg/s/cm2/A' or 'Jy'
+	filters: str
+		filters (following SVO filter IDs) to derive synthetic photometry
 
 	Returns
 	------
@@ -60,15 +63,15 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	mask_nonan = ~np.isnan(flux)
 	wl = wl[mask_nonan]
 	flux = flux[mask_nonan]
-	if (eflux is not None): eflux = eflux[mask_nonan]
+	if (eflux is not None): eflux[mask_nonan]
 
 	# when filters parameter is given as a string, convert the variable to a list so len(filters) returns 1 rather than the string length
 	if (type(filters) is str): filters = ([filters])
 
 	# read filters transmission curves and zero points
-	zeropoints = Table.read('zeropoints.xml', format='votable')
-	filterID = zeropoints['filterID'] # VSO ID
-	ZeroPoint = zeropoints['ZeroPoint'] # Jy
+	svo_data = Table.read('https://svo.cab.inta-csic.es/files/svo/Public/HowTo/FPS/FPS_info.xml', format='votable') # this link will be updated as soon as new filters are added to FPS. 
+	filterID = svo_data['filterID'] # VSO ID
+	ZeroPoint = svo_data['ZeroPoint'] # Jy
 
 	# arrays to store relevant information
 	syn_flux_Jy = np.zeros(len(filters))
@@ -79,6 +82,7 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	esyn_mag = np.zeros(len(filters))
 	lambda_eff = np.zeros(len(filters))
 	width_eff = np.zeros(len(filters))
+	zero_point = np.zeros(len(filters))
 	# assign NaN values (this will be the output for an input filter name not recognized by the SVO)
 	syn_flux_Jy[:] = np.nan
 	esyn_flux_Jy[:] = np.nan
@@ -88,6 +92,7 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	esyn_mag[:] = np.nan
 	lambda_eff[:] = np.nan
 	width_eff[:] = np.nan
+	zero_point[:] = np.nan
 	for k in range(len(filters)): # iterate for each filter
 		# check first if the filter name is on the VSO
 		if not filters[k] in filterID: print(f'   filter {filters[k]} is not recognized by the SVO, so will be ignored')
@@ -95,7 +100,7 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 			# read filter transmission
 			# check if the filter transmission exits locally already
 			path_filter_transmissions = 'filter_transmissions/'
-			if not os.path.exists(path_filter_transmissions): os.makedirs(path_filter_transmissions) # make directory (if not existing) to store filter transmissions
+			if not os.path.exists(path_synthetic_photometry+path_filter_transmissions): os.makedirs(path_synthetic_photometry+path_filter_transmissions) # make directory (if not existing) to store filter transmissions
 			filter_transmission_name = filters[k].replace('/', '_')+'.dat' # when filter name includes '/' replace it by '_'
 			if not os.path.exists(path_synthetic_photometry+path_filter_transmissions+filter_transmission_name): # filter transmission does not exits yet
 				print(f'\nreading and storing filter {filters[k]} directly from the SVO')
@@ -160,10 +165,12 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 				if any(mask) is False: print(f'\nERROR: NO ZERO POINT FOR FILTER {filters[k]}'), exit()
 				syn_mag[k] = -2.5*np.log10(syn_flux_Jy[k]/ZeroPoint[mask]) # in mag
 				if (eflux is not None): esyn_mag[k] = (2.5/np.log(10))*np.sqrt((esyn_flux_Jy[k]/syn_flux_Jy[k])**2)#+(ephot_F0/phot_F0)**2) # in mag
-			
+
+				zero_point[k] = ZeroPoint[mask]
+
 				del filter_transmission # remove variable with filter transmission so it won't exit if an input filter name doesn't match an existing one
 
-	out_synthetic_photometry = {'syn_flux(Jy)': syn_flux_Jy, 'syn_flux(erg/s/cm2/A)': syn_flux_erg, 'syn_mag': syn_mag, 'lambda_eff(um)': lambda_eff, 'width_eff(um)': width_eff}
+	out_synthetic_photometry = {'syn_flux(Jy)': syn_flux_Jy, 'syn_flux(erg/s/cm2/A)': syn_flux_erg, 'syn_mag': syn_mag, 'lambda_eff(um)': lambda_eff, 'width_eff(um)': width_eff, 'zero_point(Jy)': zero_point}
 	if (eflux is not None): out_synthetic_photometry['esyn_flux(Jy)'] = esyn_flux_Jy
 	if (eflux is not None): out_synthetic_photometry['esyn_flux(erg/s/cm2/A)'] = esyn_flux_erg
 	if (eflux is not None): out_synthetic_photometry['esyn_mag'] = esyn_mag
