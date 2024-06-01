@@ -23,7 +23,7 @@ Compute synthetic photometry (magnitudes and fluxes) from spectra for different 
 
 ## Example
 ```
-import synthetic_photometry as synthetic_photometry
+from synthetic_photometry import synthetic_photometry
 ```
 assume we have a spectrum wavelength (wl in um), flux (in erg/s/cm2/A), and flux error (eflux) and we want synthetic photometry for several filters
 ```
@@ -31,7 +31,7 @@ filters = (['Spitzer/IRAC.I1', 'WISE/WISE.W1']) # filters of interest
 ```
 run the code
 ```
-out = synthetic_photometry.synthetic_photometry(wl=wl, flux=flux, eflux=eflux, flux_unit='erg/s/cm2/A', filters=filters)
+out = synthetic_photometry(wl=wl, flux=flux, eflux=eflux, flux_unit='erg/s/cm2/A', filters=filters)
 ```
 output
 ```
