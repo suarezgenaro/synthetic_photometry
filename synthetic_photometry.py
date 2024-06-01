@@ -71,7 +71,12 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	if (type(filters) is str): filters = ([filters])
 
 	# read filters transmission curves and zero points
-	svo_data = Table.read('https://svo.cab.inta-csic.es/files/svo/Public/HowTo/FPS/FPS_info.xml', format='votable') # this link will be updated as soon as new filters are added to FPS. 
+	svo_table = f'{path_synthetic_photometry}/FPS_info.xml'
+	if os.path.exists(svo_table): 
+		svo_data = Table.read(svo_table, format='votable') # open downloaded table with filters' info
+	else:
+		svo_data = Table.read('https://svo.cab.inta-csic.es/files/svo/Public/HowTo/FPS/FPS_info.xml', format='votable') # this link will be updated as soon as new filters are added to FPS. 
+		svo_data.write(svo_table, format='votable') # save table to avoid reading from the web the table each time the code is run, which can take a few seconds
 	filterID = svo_data['filterID'] # VSO ID
 	ZeroPoint = svo_data['ZeroPoint'] # Jy
 
@@ -101,22 +106,18 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 		else:
 			# read filter transmission
 			# check if the filter transmission exits locally already
-			path_filter_transmissions = 'filter_transmissions/'
-			if not os.path.exists(path_synthetic_photometry+path_filter_transmissions): os.makedirs(path_synthetic_photometry+path_filter_transmissions) # make directory (if not existing) to store filter transmissions
+			path_filter_transmissions = f'{path_synthetic_photometry}/filter_transmissions/'
+			if not os.path.exists(path_filter_transmissions): os.makedirs(path_filter_transmissions) # make directory (if not existing) to store filter transmissions
 			filter_transmission_name = filters[k].replace('/', '_')+'.dat' # when filter name includes '/' replace it by '_'
-			if not os.path.exists(path_synthetic_photometry+path_filter_transmissions+filter_transmission_name): # filter transmission does not exits yet
+			if not os.path.exists(path_filter_transmissions+filter_transmission_name): # filter transmission does not exits yet
 				print(f'\nreading and storing filter {filters[k]} directly from the SVO')
 				# read filter transmission directly from SVO
 				page = f'http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID={filters[k]}'
 				filter_transmission = Table.read(page, format='votable')
 				# save filter transmission if it doesn't exist already
-				ascii.write(filter_transmission, path_synthetic_photometry+path_filter_transmissions+filter_transmission_name, format='no_header', formats={'Wavelength': '%.1f', 'Transmission': '%.10f'})
+				ascii.write(filter_transmission, path_filter_transmissions+filter_transmission_name, format='no_header', formats={'Wavelength': '%.1f', 'Transmission': '%.10f'})
 	
-	#		try: filter_transmission
-	#		except NameError: print(f'ERROR: NO FILTER RESPONSE FILE FOR FILTER {filters[k]}'), exit()
-	
-			filter_transmission = ascii.read(path_synthetic_photometry+path_filter_transmissions+filter_transmission_name) # read locally stored filter transmission
-			#print(f'reading filter {filters[k]} directly from the SVO')
+			filter_transmission = ascii.read(path_filter_transmissions+filter_transmission_name) # read locally stored filter transmission
 	
 			filter_wl = filter_transmission['col1'] / 1e4 # in um
 			filter_flux = filter_transmission['col2'] # filter transmission (named filter_flux just for ease)
