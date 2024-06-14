@@ -65,7 +65,7 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	mask_nonan = ~np.isnan(flux)
 	wl = wl[mask_nonan]
 	flux = flux[mask_nonan]
-	if (eflux is not None): eflux[mask_nonan]
+	if (eflux is not None): eflux = eflux[mask_nonan]
 
 	# when filters parameter is given as a string, convert the variable to a list so len(filters) returns 1 rather than the string length
 	if (type(filters) is str): filters = ([filters])
@@ -130,18 +130,18 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 		
 				wl_disp = wl[mask_wl][1:] - wl[mask_wl][:-1] # dispersion of spectrum spectra (um)
 				wl_disp = np.append(wl_disp, wl_disp[-1]) # add an element equal to the last row to keep the same shape as the wl array
-		
+
 				# synthetic photometry
 				# resample filter transmission to the spectrum wavelength
 				filter_flux_resam = np.interp(wl[mask_wl], filter_wl, filter_flux) # dimensionless
-				
+
 				# normalize the transmission curve (it was dimensionless but now it has 1/um units)
 				filter_flux_resam_norm = filter_flux_resam / sum(filter_flux_resam*wl_disp) # 1/um
-				
+
 				# synthetic flux density
 				syn_flux = sum(flux[mask_wl]*filter_flux_resam_norm*wl_disp) # in input flux units (erg/s/cm2/A or Jy)
 				if (eflux is not None): esyn_flux = np.median(eflux[mask_wl]/flux[mask_wl]) * syn_flux # synthetic flux error as the median fractional flux uncertainties in the filter passband
-				
+
 				# compute the effective wavelength and effective width for each filter
 				lambda_eff[k] = sum(wl[mask_wl]*filter_flux_resam*flux[mask_wl]*wl_disp) / sum(filter_flux_resam*flux[mask_wl]*wl_disp) # um
 				width_eff[k] = sum(filter_flux_resam*wl_disp) / filter_flux_resam.max() # um
