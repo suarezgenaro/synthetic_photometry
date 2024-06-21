@@ -123,7 +123,7 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 			filter_flux = filter_transmission['col2'] # filter transmission (named filter_flux just for ease)
 		
 			# verify the spectrum fully covers the filter transmission
-			if ((filter_wl.min()<wl.min()) | (filter_wl.max()>wl.max())): print(f'CAVEAT: NO FULL SPECTRAL COVERAGE FOR FILTER {filters[k]}')
+			if ((filter_wl.min()<wl.min()) | (filter_wl.max()>wl.max())): print(f'CAVEAT: NO FULL SPECTRAL COVERAGE FOR FILTER {filters[k]}, SO THE SYNTHETIC VALUE IS A LOWER LIMIT')
 			if ((filter_wl.min()<wl.max()) | (filter_wl.max()>wl.min())): # filter covered partially or fully
 				# wavelength dispersion of the spectrum in the filter wavelength range
 				mask_wl = (wl>=filter_wl.min()) & (wl<=filter_wl.max())
