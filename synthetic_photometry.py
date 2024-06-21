@@ -102,7 +102,7 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	zero_point[:] = np.nan
 	for k in range(len(filters)): # iterate for each filter
 		# check first if the filter name is on the VSO
-		if not filters[k] in filterID: print(f'   filter {filters[k]} is not recognized by the SVO, so will be ignored')
+		if not filters[k] in filterID: print(f'Caveat for {filters[k]}: FILTER NOT RECOGNIZED BY THE SVO, so will be ignored')
 		else:
 			# read filter transmission
 			# check if the filter transmission exits locally already
@@ -123,8 +123,14 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 			filter_flux = filter_transmission['col2'] # filter transmission (named filter_flux just for ease)
 		
 			# verify the spectrum fully covers the filter transmission
-			if ((filter_wl.min()<wl.min()) | (filter_wl.max()>wl.max())): print(f'CAVEAT: NO FULL SPECTRAL COVERAGE FOR FILTER {filters[k]}, SO THE SYNTHETIC VALUE IS A LOWER LIMIT')
-			if ((filter_wl.min()<wl.max()) | (filter_wl.max()>wl.min())): # filter covered partially or fully
+			if ((filter_wl.max()<wl.min()) | (filter_wl.min()>wl.max())): # filter out of the spectrum coverage
+				print(f'Caveat for {filters[k]}: NO WAVELENGTH COVERAGE, so synthetic photometry won\'t be obtained')
+			else: # filter fully or partially covered
+				if ((filter_wl.min()<wl.min()) & (filter_wl.max()>wl.min())): # blue-end of the filter partially covered
+					print(f'Caveat for {filters[k]}: NO FULL SPECTRAL COVERAGE, so the synthetic value is a lower limit')
+				if ((filter_wl.max()>wl.max()) & (filter_wl.min()<wl.max())): # red-end of the filter partially covered
+					print(f'Caveat for {filters[k]}: NO FULL SPECTRAL COVERAGE, so the synthetic value is a lower limit')
+
 				# wavelength dispersion of the spectrum in the filter wavelength range
 				mask_wl = (wl>=filter_wl.min()) & (wl<=filter_wl.max())
 		
