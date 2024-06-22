@@ -31,8 +31,9 @@ filter IDs to derive synthetic photometry following [SVO filter IDs](http://svo2
 ```
 from synthetic_photometry import synthetic_photometry
 ```
-assume we have a spectrum with wavelengths (in microns), fluxes (in erg/s/cm2/A), and flux error in 'eflux'
-stored in the variables 'wl', 'flux', and 'eflux', respectively, and we want synthetic photometry for several filters
+assume we have a spectrum with wavelengths (in microns), fluxes (in erg/s/cm2/A), <br>
+and flux error in 'eflux' stored in the variables 'wl', 'flux', and 'eflux', respectively, <br>
+and we want obtain synthetic photometry for several filters
 ```
 filters = (['Spitzer/IRAC.I1', 'WISE/WISE.W1']) # filters of interest
 ```
