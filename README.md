@@ -2,18 +2,18 @@
 Compute synthetic photometry (magnitudes and fluxes) from spectra for different filters
 
 ## Input parameters
-* wl : array <br>
+* wl : float array <br>
 wavelength in um
-* flux : array <br>
+* flux :float  array <br>
 fluxes in units specified by flux_unit
-* eflux : array (optional) <br>
+* eflux : float array (optional) <br>
 flux errors in units specified by flux_unit
 * flux_unit : str <br>
 flux and flux error units
 	* 'erg/s/cm2/A'
 	* 'Jy'
 * filters : list <br>
-filter IDs to derive synthetic photometry following [SVO filter names](http://svo2.cab.inta-csic.es/theory/fps/)
+filter IDs to derive synthetic photometry following [SVO filter IDs](http://svo2.cab.inta-csic.es/theory/fps/)
 
 ## Returns
 ------

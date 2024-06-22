@@ -14,9 +14,11 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 	flux: float array
 		fluxes in units specified by flux_unit
 	eflux: flux array (optional) 
-		flux errors in units specified by flux_unit to estimate synthetic photometry errors
+		flux errors in units specified by flux_unit
 	flux_unit: str
-		flux and flux error units 'erg/s/cm2/A' or 'Jy'
+		flux and flux error units
+			'erg/s/cm2/A'
+			'Jy'
 	filters: str
 		filters (following SVO filter IDs) to derive synthetic photometry
 
