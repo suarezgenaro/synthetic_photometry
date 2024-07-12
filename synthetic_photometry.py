@@ -182,8 +182,9 @@ def synthetic_photometry(wl, flux, filters, flux_unit, eflux=None):
 				del filter_transmission # remove variable with filter transmission so it won't exit if an input filter name doesn't match an existing one
 
 	out_synthetic_photometry = {'syn_flux(Jy)': syn_flux_Jy, 'syn_flux(erg/s/cm2/A)': syn_flux_erg, 'syn_mag': syn_mag, 'lambda_eff(um)': lambda_eff, 'width_eff(um)': width_eff, 'zero_point(Jy)': zero_point}
-	if (eflux is not None): out_synthetic_photometry['esyn_flux(Jy)'] = esyn_flux_Jy
-	if (eflux is not None): out_synthetic_photometry['esyn_flux(erg/s/cm2/A)'] = esyn_flux_erg
-	if (eflux is not None): out_synthetic_photometry['esyn_mag'] = esyn_mag
+	if (eflux is not None): 
+		out_synthetic_photometry['esyn_flux(Jy)'] = esyn_flux_Jy
+		out_synthetic_photometry['esyn_flux(erg/s/cm2/A)'] = esyn_flux_erg
+		out_synthetic_photometry['esyn_mag'] = esyn_mag
 
 	return out_synthetic_photometry 
