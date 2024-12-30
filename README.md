@@ -1,5 +1,5 @@
 # Synthetic Photometry
-Compute synthetic photometry (magnitudes and fluxes) from a spectrum for any filters in the [SVO](http://svo2.cab.inta-csic.es/theory/fps/).
+Compute synthetic photometry (magnitudes and fluxes) from a spectrum for any filters in [SVO](http://svo2.cab.inta-csic.es/theory/fps/).
 
 ## Input parameters
 * wl : float array <br>
