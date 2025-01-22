@@ -1,8 +1,7 @@
 # ``synthetic_photometry``
+(The most recent version of this function is available via the [SEDA](https://seda.readthedocs.io/en/latest/index.html) package through [seda.synthetic_photometry](https://seda.readthedocs.io/en/latest/api.html#seda.synthetic_photometry.synthetic_photometry.synthetic_photometry).)
+
 Compute synthetic photometry (magnitudes and fluxes) from a spectrum for any filters in [SVO](http://svo2.cab.inta-csic.es/theory/fps/).
-
-The most recent version of this function is available via the [SEDA](https://seda.readthedocs.io/en/latest/index.html) code through [seda.synthetic_photometry](https://seda.readthedocs.io/en/latest/api.html#seda.synthetic_photometry.synthetic_photometry.synthetic_photometry).
-
 
 ## Input parameters
 * wl : float array <br>
